@@ -5,7 +5,6 @@ const toDoList = document.getElementById("todo-list");
 
 function addList(e, t) {
   e.preventDefault();
-  console.log(toDoValue.value);
   const id = Date.now();
   todoListContainer.push({ id: id, value: toDoValue.value });
 
@@ -27,7 +26,28 @@ function deleteList(id) {
 
 function renderTodoList() {
   todoListContainer.forEach(function (list) {
-    const html = `<li >${list.value} <button onclick="deleteList(${list.id})">delete</button> </li>`;
+    const html = `<li >${list.value} <button onclick="deleteList(${list.id})">delete</button>
+     <button onclick="edit(${list.id},'${list.value}')">Edit</button></li>`;
     toDoList.insertAdjacentHTML("beforeend", html);
   });
+}
+
+function edit(id, value) {
+  toDoValue.value = value;
+  toDoValue.setAttribute("data-id", id);
+}
+
+function update() {
+  const value = toDoValue.value;
+  const id = toDoValue.getAttribute("data-id") * 1;
+
+  const index = todoListContainer.findIndex(function (toList) {
+    return toList.id === id;
+  });
+  todoListContainer[index].value = value;
+  toDoList.innerHTML = "";
+  renderTodoList();
+  toDoValue.removeAttribute("data-id");
+  toDoValue.value = "";
+  toDoValue.focus();
 }
