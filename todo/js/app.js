@@ -1,4 +1,4 @@
-let todoListContainer = [];
+const todoListContainer = [];
 
 const toDoValue = document.getElementById("todo");
 const toDoList = document.getElementById("todo-list");
@@ -15,16 +15,16 @@ function addList(e, t) {
 }
 
 function deleteList(id) {
-  const list = todoListContainer.filter(function (todoList) {
-    return todoList.id !== id;
+  const index = todoListContainer.findIndex(function (todo) {
+    return todo.id === id;
   });
 
-  todoListContainer = list;
-  toDoList.innerHTML = "";
+  todoListContainer.splice(index, 1);
   renderTodoList();
 }
 
 function renderTodoList() {
+  toDoList.innerHTML = "";
   todoListContainer.forEach(function (list) {
     const html = `<li >${list.value} <button onclick="deleteList(${list.id})">delete</button>
      <button onclick="edit(${list.id},'${list.value}')">Edit</button></li>`;
@@ -44,8 +44,9 @@ function update() {
   const index = todoListContainer.findIndex(function (toList) {
     return toList.id === id;
   });
+
   todoListContainer[index].value = value;
-  toDoList.innerHTML = "";
+
   renderTodoList();
   toDoValue.removeAttribute("data-id");
   toDoValue.value = "";
